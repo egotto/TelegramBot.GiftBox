@@ -1,0 +1,61 @@
+{
+  "calendarName": "Sample Advent Calendar",
+  "startDate": "2026-12-01",
+  "endDate": "2026-12-24",
+  "timeZone": "Europe/Warsaw",
+  "defaultLanguage": "ru",
+  "recipientTelegramIds": [123456789],
+  "adminTelegramIds": [987654321],
+  "gifts": [
+    {
+      "id": "day01",
+      "day": 1,
+      "availableFrom": "2026-12-01T00:00:00+01:00",
+      "activationCode": "SAMPLE-01-X9K2",
+      "type": "steamLink",
+      "title": "Sample game",
+      "description": "Replace this description with your gift details.",
+      "payload": {
+        "url": "https://store.steampowered.com/"
+      }
+    },
+    {
+      "id": "day02",
+      "day": 2,
+      "availableFrom": "2026-12-02T00:00:00+01:00",
+      "activationCode": "SAMPLE-02-A7M4",
+      "type": "steamCode",
+      "title": "Sample Steam code",
+      "description": "Replace this placeholder before use.",
+      "payload": {
+        "code": "XXXXX-XXXXX-XXXXX",
+        "instructionsUrl": "https://help.steampowered.com/"
+      }
+    },
+    {
+      "id": "day03",
+      "day": 3,
+      "availableFrom": "2026-12-03T00:00:00+01:00",
+      "activationCode": "SAMPLE-03-B2Q8",
+      "type": "walletCode",
+      "title": "Sample wallet code",
+      "description": "Replace this placeholder before use.",
+      "payload": {
+        "code": "XXXX-XXXX-XXXX",
+        "amount": 50,
+        "currency": "PLN",
+        "redeemUrl": "https://store.steampowered.com/account/redeemwalletcode"
+      }
+    },
+    {
+      "id": "day04",
+      "day": 4,
+      "availableFrom": "2026-12-04T00:00:00+01:00",
+      "activationCode": "SAMPLE-04-C3R8",
+      "type": "surprise",
+      "title": "A little surprise",
+      "description": "Your gift is hidden inside the red box.",
+      "payload": {}
+    }
+  ]
+}

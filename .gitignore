@@ -38,6 +38,11 @@ ScaffoldingReadMe.txt
 
 # dotenv environment variables file
 .env
+.env.*
+!.env.example
+
+# Private calendar contains activation codes and gift secrets
+/config/gifts.json
 
 # Others
 ~$*

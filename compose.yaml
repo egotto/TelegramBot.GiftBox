@@ -1,0 +1,11 @@
+services:
+  giftbox-bot:
+    build:
+      context: .
+      dockerfile: src/TelegramBot.GiftBox/Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./config/gifts.json:/app/config/gifts.json:ro
+      - ./images:/app/images:ro
+    restart: unless-stopped
