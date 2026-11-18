@@ -69,6 +69,9 @@ jobs:
       - name: Update release with image info
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.tag.outputs.tag }}
+          IMAGE_TAG: ghcr.io/egotto/telegrambot.giftbox:${{ steps.tag.outputs.version }}
         run: |
-          gh release edit "${{ steps.tag.outputs.tag }}" \
-            --notes "$(gh release view "${{ steps.tag.outputs.tag }}" --json body --jq .body)\nDocker image: ghcr.io/egotto/telegrambot.giftbox:${{ steps.tag.outputs.version }}"
+          RELEASE_NOTES=$(gh release view "$RELEASE_TAG" --json body --jq .body)
+          RELEASE_NOTES="${RELEASE_NOTES}"$'\n'"Docker image: ${IMAGE_TAG}"
+          gh release edit "$RELEASE_TAG" --notes "$RELEASE_NOTES"
