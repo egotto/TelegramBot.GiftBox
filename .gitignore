@@ -41,6 +41,9 @@ ScaffoldingReadMe.txt
 .env.*
 !.env.example
 
+# Local development settings may contain secrets
+/src/TelegramBot.GiftBox/appsettings.Development.json
+
 # Private calendar contains activation codes and gift secrets
 /config/gifts.json
 
