@@ -1,0 +1,46 @@
+name: Validate and build
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'TelegramBot.GiftBox.sln'
+      - '.github/workflows/validate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore TelegramBot.GiftBox.sln
+
+      - name: Build .NET solution
+        run: dotnet build TelegramBot.GiftBox.sln --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test TelegramBot.GiftBox.sln --configuration Release --no-build --no-restore
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./src/TelegramBot.GiftBox/Dockerfile
+          push: false
+          tags: telegram-giftbox-bot:validation
