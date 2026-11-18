@@ -1,11 +1,34 @@
 services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-telegram_giftbox}
+      POSTGRES_USER: ${POSTGRES_USER:-giftbox}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   giftbox-bot:
-    build:
-      context: .
-      dockerfile: src/TelegramBot.GiftBox/Dockerfile
+    image: ghcr.io/egotto/telegrambot.giftbox:latest
     env_file:
       - .env
+    environment:
+      ConnectionStrings__GiftBox: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-telegram_giftbox};Username=${POSTGRES_USER:-giftbox};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}"
+    depends_on:
+      postgres:
+        condition: service_healthy
     volumes:
       - ./config/gifts.json:/app/config/gifts.json:ro
       - ./images:/app/images:ro
     restart: unless-stopped
+
+volumes:
+  postgres_data:

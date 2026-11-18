@@ -21,9 +21,9 @@ placeholders only. The real calendar file is ignored by Git.
 
 Set these values in `.env`:
 
-- `ConnectionStrings__GiftBox`: PostgreSQL connection string. The database must
-	be reachable from the container; PostgreSQL is not included in this Compose
-	file.
+- `POSTGRES_DB`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`: credentials and name
+  for the local PostgreSQL container.
+- `POSTGRES_PORT`: host port for local database tools; it is bound to localhost.
 - `Telegram__BotToken`: token supplied by BotFather.
 - `Telegram__BaseUrl`: optional custom Telegram Bot API base URL. Leave empty to
 	use the public API.
@@ -40,21 +40,23 @@ keys, or Wallet Codes.
 
 ## Run
 
-Start the bot container:
+Start the bot and local PostgreSQL containers:
 
 ```sh
-docker compose up --build -d
+docker compose up -d
 ```
 
-The bot applies EF Core migrations and synchronizes gift metadata on startup.
+Compose pulls `ghcr.io/egotto/telegrambot.giftbox:latest` and starts PostgreSQL
+with persistent storage in the `postgres_data` volume. The bot waits until the
+database is healthy, then applies EF Core migrations and synchronizes gift metadata on startup.
 When a changed code belongs to an already activated gift, synchronization waits
 for the administrator's `/reload` choices in Telegram. `/unlock <day>` records
 an early-unlock flag on the gift. Removing a gift from the JSON deactivates
 the gift and its codes while preserving redemption history.
 
-Long polling requires no inbound ports. The bot container must be able to reach
-the separately hosted PostgreSQL server and, unless configured otherwise, the
-public Telegram Bot API.
+Long polling requires no inbound ports. The PostgreSQL port is exposed only on
+localhost for local database tools. The bot connects to the Compose PostgreSQL
+service and, unless configured otherwise, the public Telegram Bot API.
 
 ## Development
 
